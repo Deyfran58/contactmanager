@@ -2,12 +2,12 @@ package cr.ac.utn.appmovil.model
 import android.content.Context
 import android.content.res.Resources
 import cr.ac.utn.appmovil.contactmanager.R
-import cr.ac.utn.appmovil.data.MemoryManager
+import cr.ac.utn.appmovil.data.DBManager
 import cr.ac.utn.appmovil.identities.Contact
 import cr.ac.utn.appmovil.interfaces.IDBManager
 
 class ContactModel {
-    private var dbManager: IDBManager = MemoryManager
+    private var dbManager: IDBManager = DBManager
     private lateinit var _context: Context
 
     constructor(context: Context){
