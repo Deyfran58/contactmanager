@@ -14,10 +14,10 @@
         android:theme="@style/Theme.Contactmanager">
 
         <provider
-                android:authorities="cr.ac.utn.appmovil.contactmanager.fileprovider"
-                android:name="androidx.core.content.FileProvider"
-                android:exported="false"
-                android:grantUriPermissions="true">
+            android:authorities="cr.ac.utn.appmovil.contactmanager.fileprovider"
+            android:name="androidx.core.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_file"/>
