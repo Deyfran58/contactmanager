@@ -6,15 +6,15 @@ class Contact {
     private var _id: String =""
     private var _name: String =""
     private var _lastName: String=""
-    private var _phone: Int = 0
+    private var _phone: String=""
     private var _email: String=""
     private var _address: String=""
     private var _country: String=""
-    private lateinit var _photo: Bitmap
+    private var _photo: Bitmap? = null
 
     constructor()
 
-    constructor(id: String, name: String, lastName: String, phone: Int, email: String, address: String, country: String, photo: Bitmap){
+    constructor(id: String, name: String, lastName: String, phone: String, email: String, address: String, country: String, photo: Bitmap?){
         this._id= id
         this._name= name
         this._lastName = lastName
@@ -22,6 +22,7 @@ class Contact {
         this._email=email
         this._address= address
         this._country= country
+        this._photo = photo
     }
 
     var Id: String
@@ -38,7 +39,7 @@ class Contact {
 
     val FullName get() = this._name + " " + this._lastName
 
-    var Phone: Int
+    var Phone: String
         get() = this._phone
         set(value) {this._phone = value}
 
@@ -54,7 +55,7 @@ class Contact {
         get() = this._country
         set(value) {this._country = value}
 
-    var Photo: Bitmap
+    var Photo: Bitmap?
         get() = this._photo
         set(value) {this._photo = value}
 }

@@ -120,7 +120,7 @@ class ContactActivity : AppCompatActivity() {
             contact.Id = txtId.text.toString()
             contact.Name = txtName.text.toString()
             contact.LastName = txtLastName.text.toString()
-            contact.Phone = txtPhone.text.toString()?.toInt()!!
+            contact.Phone = txtPhone.text.toString()
             contact.Email = txtEmail.text.toString()
             contact.Address = txtAddress.text.toString()
             contact.Photo = (imgPhoto?.drawable as BitmapDrawable).bitmap
@@ -146,7 +146,7 @@ class ContactActivity : AppCompatActivity() {
         return contact.Id.isNotEmpty() && contact.Name.isNotEmpty() &&
                 contact.LastName.isNotEmpty() && contact.Address.isNotEmpty() &&
                 contact.Email.isNotEmpty() &&
-                (contact.Phone != null && contact.Phone > 0)
+                (contact.Phone != null && contact.Phone.length > 0)
     }
 
     fun cleanScreen(){
@@ -164,14 +164,14 @@ class ContactActivity : AppCompatActivity() {
     fun loadEditContact(id: String): Boolean{
         try{
             val contact = contactMod.getContact(id)
-            txtId.setText(contact.Id)
-            txtName.setText(contact.Name)
-            txtLastName.setText(contact.LastName)
-            txtPhone.setText(contact.Phone.toString())
-            txtEmail.setText(contact.Email)
-            txtAddress.setText(contact.Address)
-            spCountries.setSelection(countries.indexOf(contact.Country.trim()))
-            imgPhoto.setImageBitmap(contact.Photo)
+            txtId.setText(contact?.Id)
+            txtName.setText(contact?.Name)
+            txtLastName.setText(contact?.LastName)
+            txtPhone.setText(contact?.Phone.toString())
+            txtEmail.setText(contact?.Email)
+            txtAddress.setText(contact?.Address)
+            spCountries.setSelection(countries.indexOf(contact?.Country?.trim()))
+            imgPhoto.setImageBitmap(contact?.Photo)
             isEditionMode = true
             txtId.isEnabled = false
 
