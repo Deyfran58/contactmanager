@@ -28,10 +28,12 @@ class ContactAdapter (private val context: Context, private val contacts: List<C
         val contactImage = view.findViewById<ImageView>(R.id.imgPhotoItem)
         val contactName = view.findViewById<TextView>(R.id.txtContactNameItem)
         val contactAddress = view.findViewById<TextView>(R.id.txtAddressItem)
+        var contactPhone = view.findViewById<TextView>(R.id.txtPhoneItem)
 
 
         contactName.text = contact._name
         contactAddress.text = contact._address
+        contactPhone.text = contact._phone.toString()
 
         // Si hay una imagen, mostrarla; si no, usa un marcador de posición
         if (contact._photo != null) {

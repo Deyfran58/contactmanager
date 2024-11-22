@@ -33,7 +33,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 $COLUMN_ID TEXT PRIMARY KEY,
                 $COLUMN_NAME TEXT NOT NULL,
                 $COLUMN_LASTNAME TEXT NOT NULL,
-                $COLUMN_PHONE NUMBER NOT NULL,
+                $COLUMN_PHONE TEXT NOT NULL,
                 $COLUMN_EMAIL TEXT NOT NULL,
                 $COLUMN_ADDRESS TEXT NOT NULL,
                 $COLUMN_COUNTRY TEXT NOT NULL,
