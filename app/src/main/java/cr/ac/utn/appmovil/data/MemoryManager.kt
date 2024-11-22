@@ -1,4 +1,4 @@
-package cr.ac.utn.appmovil.data
+package cr.ac.utn.appmovil.data/*package cr.ac.utn.appmovil.data
 import cr.ac.utn.appmovil.identities.Contact
 import cr.ac.utn.appmovil.interfaces.IDBManager
 
@@ -28,4 +28,4 @@ object MemoryManager: IDBManager {
         var result = contactList.filter { it.Id.trim().equals(id.trim()) }
         return if (result.any()) result[0] else null
     }
-}
+}*/
