@@ -42,4 +42,7 @@
     <string name="contactCountry">Country</string>
     <string name="promptSelectCountry">Select a Country</string>
     <string name="contactId">Id</string>
+    <string name="msgContactAlreadyExists">The contact already exists</string>
+    <string name="msgErrorAddingContact">Error adding contact</string>
+    <string name="msgErrorUpdatingContact">Error updating contact</string>
 </resources>
