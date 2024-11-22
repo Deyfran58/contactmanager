@@ -15,10 +15,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import cr.ac.utn.appmovil.identities.Contact
 import cr.ac.utn.appmovil.model.ContactModel
 import cr.ac.utn.appmovil.util.EXTRA_MESSAGE_CONTACTID
@@ -32,31 +29,47 @@ private const val PROVIDER = "cr.ac.utn.appmovil.contactmanager.fileprovider"
 
 class ContactActivity : AppCompatActivity() {
 
+    private lateinit var txtId: EditText
     lateinit var txtName: EditText
     lateinit var txtLastName: EditText
     lateinit var txtPhone: EditText
     lateinit var txtEmail: EditText
     lateinit var txtAddress: EditText
-    lateinit var imgPhoto: ImageView
-    var isEdit: Boolean = false
-    var contactIdEdit: String=""
     private val takePicture = 100
-    private val selectImage = 101
+    private val selectImage = 101    
+    lateinit var imgPhoto: ImageView
     lateinit var filePhoto: File
+    lateinit var spCountries: Spinner
+    lateinit var countries: List<String>
+    lateinit var contactMod: ContactModel
+    private var isEditionMode: Boolean = false
+    private lateinit var menuitemDelete: MenuItem
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_contact)
 
+        txtId = findViewById<EditText>(R.id.txtContact_Id)
         txtName = findViewById<EditText>(R.id.txtContactName)
         txtLastName = findViewById<EditText>(R.id.txtContactLastName)
         txtPhone = findViewById<EditText>(R.id.txtContactPhone)
         txtEmail = findViewById<EditText>(R.id.txtContactEmail)
         txtAddress = findViewById<EditText>(R.id.txtContactAddress)
         imgPhoto = findViewById(R.id.imgPhoto_Contact)
+        spCountries = findViewById<Spinner>(R.id.spCountries_contact)
 
-        val contactId = intent.getStringExtra(EXTRA_MESSAGE_CONTACTID)
-        if (contactId != null && contactId != "") isEdit = loadEditContact(contactId.toString())
+        contactMod = ContactModel(this)
+        loadCountries()
+
+        spCountries.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                Toast.makeText(this@ContactActivity, countries[position].toString(), Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // write code to perform some action
+            }
+        }
 
         val btnTakePhoto: Button = findViewById<Button>(R.id.btnTakePicture)
         btnTakePhoto.setOnClickListener(View.OnClickListener { view ->
@@ -67,6 +80,9 @@ class ContactActivity : AppCompatActivity() {
         btnSelectPhoto.setOnClickListener(View.OnClickListener { view ->
            selectPhoto()
         })
+
+        val contactId = intent.getStringExtra(EXTRA_MESSAGE_CONTACTID)
+        if (contactId != null && contactId != "") isEditionMode = loadEditContact(contactId.toString())
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -76,7 +92,7 @@ class ContactActivity : AppCompatActivity() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        menu?.findItem(R.id.mnuDelete)?.setVisible(isEdit)
+        menu?.findItem(R.id.mnuDelete)?.setVisible(isEditionMode)
         return true
     }
 
@@ -87,8 +103,12 @@ class ContactActivity : AppCompatActivity() {
                 true
             }
             R.id.mnuDelete -> {
-                deleteContact()
+                confirmDelete()
                 true
+            }
+            R.id.mnuCancel -> {
+                cleanScreen()
+                return true
             }
             else -> super.onOptionsItemSelected(item)
         }
@@ -97,18 +117,20 @@ class ContactActivity : AppCompatActivity() {
     fun saveContact(){
         try {
             val contact = Contact()
+            contact.Id = txtId.text.toString()
             contact.Name = txtName.text.toString()
             contact.LastName = txtLastName.text.toString()
-            contact.Phone = txtPhone.text.toString()?.toInt()
+            contact.Phone = txtPhone.text.toString()?.toInt()!!
             contact.Email = txtEmail.text.toString()
             contact.Address = txtAddress.text.toString()
             contact.Photo = (imgPhoto?.drawable as BitmapDrawable).bitmap
+            contact.Country = spCountries.selectedItem.toString()
 
             if (dataValidation(contact)){
-                if (!isEdit)
-                    ContactModel.addContact(contact)
+                if (!isEditionMode)
+                    contactMod.addContact(contact)
                 else
-                    ContactModel.updateContact(contactIdEdit, contact)
+                    contactMod.updateContact(contact)
 
                 cleanScreen()
                 Toast.makeText(this, getString(R.string.msgSave).toString(),Toast.LENGTH_LONG).show()
@@ -120,39 +142,38 @@ class ContactActivity : AppCompatActivity() {
         }
     }
 
-    fun deleteContact(){
-        //if (dataValidation()){
-
-            Toast.makeText(this, getString(R.string.msgDelete).toString(),Toast.LENGTH_LONG).show()
-        //}else{
-          //  Toast.makeText(this, getString(R.string.msgInvalidData).toString(),Toast.LENGTH_LONG).show()
-        //}
-    }
-
     fun dataValidation(contact: Contact): Boolean{
-        return contact.Name.length > 0 && contact.LastName.length > 0 && contact.Address.length > 0 && contact.Email.length > 0 && contact.Phone > 0
+        return contact.Id.isNotEmpty() && contact.Name.isNotEmpty() &&
+                contact.LastName.isNotEmpty() && contact.Address.isNotEmpty() &&
+                contact.Email.isNotEmpty() &&
+                (contact.Phone != null && contact.Phone > 0)
     }
 
     fun cleanScreen(){
-        contactIdEdit = ""
-        isEdit=false
+        txtId.setText("")
         txtName.setText("")
         txtLastName.setText("")
         txtPhone.setText("")
         txtEmail.setText("")
         txtAddress.setText("")
+        txtId.isEnabled = true
+        isEditionMode = false
+        invalidateOptionsMenu()
     }
 
     fun loadEditContact(id: String): Boolean{
         try{
-            val contact = ContactModel.getContact(id)
-            contactIdEdit= contact.FullName.trim()
+            val contact = contactMod.getContact(id)
+            txtId.setText(contact.Id)
             txtName.setText(contact.Name)
             txtLastName.setText(contact.LastName)
             txtPhone.setText(contact.Phone.toString())
             txtEmail.setText(contact.Email)
             txtAddress.setText(contact.Address)
+            spCountries.setSelection(countries.indexOf(contact.Country.trim()))
             imgPhoto.setImageBitmap(contact.Photo)
+            isEditionMode = true
+            txtId.isEnabled = false
 
             return true
         }catch (e: Exception){
@@ -169,7 +190,7 @@ class ContactActivity : AppCompatActivity() {
             .setPositiveButton(getString(R.string.Ok), DialogInterface.OnClickListener {
                     dialog, id ->
 
-                ContactModel.deleteContact(contactIdEdit)
+                contactMod.removeContact(txtId.text.toString())
                 cleanScreen()
                 Toast.makeText(this, getString(R.string.msgDelete).toString(), Toast.LENGTH_LONG).show()
 
@@ -189,12 +210,16 @@ class ContactActivity : AppCompatActivity() {
         startActivityForResult(intent, selectImage)
     }
 
-    fun TakePhoto(){
-        val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        filePhoto = getPhotoFile(FILE_NAME)
-        val providerFile = FileProvider.getUriForFile(this,PROVIDER, filePhoto)
-        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, providerFile)
-        startActivityForResult(takePhotoIntent, takePicture)
+    fun TakePhoto() {
+        try {
+            val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            filePhoto = getPhotoFile(FILE_NAME)
+            val providerFile = FileProvider.getUriForFile(this, PROVIDER, filePhoto)
+            takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, providerFile)
+            startActivityForResult(takePhotoIntent, takePicture)
+        } catch (e: Exception) {
+            Toast.makeText(this, "Error al iniciar la cámara: ${e.message}", Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun getPhotoFile(fileName: String): File{
@@ -205,14 +230,25 @@ class ContactActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (resultCode == RESULT_OK && requestCode == selectImage){            
+        if (resultCode == RESULT_OK && requestCode == selectImage) {
             val imageUri = data?.data
             imgPhoto.setImageURI(imageUri)
-        }
-        else if (resultCode == RESULT_OK && requestCode == takePicture){
-            val takenPhoto = BitmapFactory.decodeFile(filePhoto.absolutePath)
-            imgPhoto.setImageBitmap(takenPhoto)
+        } else if (resultCode == RESULT_OK && requestCode == takePicture) {
+            if (::filePhoto.isInitialized) {
+                val takenPhoto = BitmapFactory.decodeFile(filePhoto.absolutePath)
+                imgPhoto.setImageBitmap(takenPhoto)
+            } else {
+                Toast.makeText(this, "Error: Archivo de foto no inicializado", Toast.LENGTH_LONG).show()
+            }
         }
     }
-   
+
+    fun loadCountries(){
+        countries = resources.getStringArray(R.array.Countries).toList()
+        if (spCountries != null) {
+            val adapter = ArrayAdapter.createFromResource(this, R.array.Countries, android.R.layout.simple_spinner_item)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spCountries.adapter = adapter
+        }
+    }
 }
