@@ -26,12 +26,12 @@ class ContactAdapter (private val context: Context, private val contacts: List<C
 
         // Vincula los datos al diseño
         val contactImage = view.findViewById<ImageView>(R.id.imgPhotoItem)
-        val contactName = view.findViewById<TextView>(R.id.txtContactNameItem)
+        val contactFullName = view.findViewById<TextView>(R.id.txtContactNameItem)
         val contactAddress = view.findViewById<TextView>(R.id.txtAddressItem)
         var contactPhone = view.findViewById<TextView>(R.id.txtPhoneItem)
 
 
-        contactName.text = contact._name
+        contactFullName.text = contact._name + " " + contact._lastName
         contactAddress.text = contact._address
         contactPhone.text = contact._phone.toString()
 
