@@ -114,34 +114,34 @@ class ContactActivity : AppCompatActivity() {
         }
     }
 
-    fun saveContact(){
+    fun saveContact() {
         try {
-            val contact = Contact()
-            contact.Id = txtId.text.toString()
-            contact.Name = txtName.text.toString()
-            contact.LastName = txtLastName.text.toString()
-            contact.Phone = txtPhone.text.toString()?.toInt()!!
-            contact.Email = txtEmail.text.toString()
-            contact.Address = txtAddress.text.toString()
-            contact.Photo = (imgPhoto?.drawable as BitmapDrawable).bitmap
-            contact.Country = spCountries.selectedItem.toString()
+            val contact = Contact(
+                id = txtId.text.toString().trim(),
+                name = txtName.text.toString().trim(),
+                lastName = txtLastName.text.toString().trim(),
+                phone = txtPhone.text.toString().toIntOrNull() ?: 0,
+                email = txtEmail.text.toString().trim(),
+                address = txtAddress.text.toString().trim(),
+                country = spCountries.selectedItem.toString(),
+                photo = (imgPhoto.drawable as BitmapDrawable).bitmap
+            )
 
-            if (dataValidation(contact)){
-                if (!isEditionMode)
+            if (dataValidation(contact)) {
+                if (!isEditionMode) {
                     contactMod.addContact(contact)
-                else
+                } else {
                     contactMod.updateContact(contact)
-
+                }
                 cleanScreen()
-                Toast.makeText(this, getString(R.string.msgSave).toString(),Toast.LENGTH_LONG).show()
-            }else{
-                Toast.makeText(this, getString(R.string.msgInvalidData).toString(),Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.msgSave), Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this, getString(R.string.msgInvalidData), Toast.LENGTH_LONG).show()
             }
-        }catch (e: Exception){
-            Toast.makeText(this, e.message.toString(),Toast.LENGTH_LONG).show()
+        } catch (e: Exception) {
+            Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
         }
     }
-
     fun dataValidation(contact: Contact): Boolean{
         return contact.Id.isNotEmpty() && contact.Name.isNotEmpty() &&
                 contact.LastName.isNotEmpty() && contact.Address.isNotEmpty() &&
@@ -161,9 +161,10 @@ class ContactActivity : AppCompatActivity() {
         invalidateOptionsMenu()
     }
 
-    fun loadEditContact(id: String): Boolean{
-        try{
-            val contact = contactMod.getContact(id)
+    fun loadEditContact(id: String): Boolean {
+        try {
+            val contact = contactMod.getContact(id) ?: return false
+
             txtId.setText(contact.Id)
             txtName.setText(contact.Name)
             txtLastName.setText(contact.LastName)
@@ -172,16 +173,15 @@ class ContactActivity : AppCompatActivity() {
             txtAddress.setText(contact.Address)
             spCountries.setSelection(countries.indexOf(contact.Country.trim()))
             imgPhoto.setImageBitmap(contact.Photo)
+
             isEditionMode = true
             txtId.isEnabled = false
-
             return true
-        }catch (e: Exception){
-            Toast.makeText(this, e.message.toString(),Toast.LENGTH_LONG).show()
+        } catch (e: Exception) {
+            Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
         }
         return false
     }
-
     fun confirmDelete(){
         val dialogBuilder = AlertDialog.Builder(this)
 
