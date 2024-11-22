@@ -1,6 +1,8 @@
 package cr.ac.utn.appmovil.identities
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import java.io.ByteArrayOutputStream
 
 class Contact {
     private var _id: String =""
@@ -10,7 +12,7 @@ class Contact {
     private var _email: String=""
     private var _address: String=""
     private var _country: String=""
-    private lateinit var _photo: Bitmap
+    private var _photoByteArray: ByteArray? = null
 
     constructor()
 
@@ -22,6 +24,7 @@ class Contact {
         this._email=email
         this._address= address
         this._country= country
+        this.Photo = photo
     }
 
     var Id: String
@@ -54,7 +57,19 @@ class Contact {
         get() = this._country
         set(value) {this._country = value}
 
-    var Photo: Bitmap
-        get() = this._photo
-        set(value) {this._photo = value}
+    var Photo: Bitmap?
+        get() = _photoByteArray?.let { BitmapFactory.decodeByteArray(it, 0, it.size) }
+        set(value) {
+            _photoByteArray = value?.let {
+                val stream = ByteArrayOutputStream()
+                it.compress(Bitmap.CompressFormat.PNG, 100, stream)
+                stream.toByteArray()
+            }
+        }
+
+    var PhotoByteArray: ByteArray?
+        get() = _photoByteArray
+        set(value) {
+            _photoByteArray = value
+        }
 }
