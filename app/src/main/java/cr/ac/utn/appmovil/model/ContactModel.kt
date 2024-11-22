@@ -1,17 +1,19 @@
 package cr.ac.utn.appmovil.model
+
 import android.content.Context
-import android.content.res.Resources
 import cr.ac.utn.appmovil.contactmanager.R
-import cr.ac.utn.appmovil.data.DBManager
+import cr.ac.utn.appmovil.data.SQLiteManager
 import cr.ac.utn.appmovil.identities.Contact
 import cr.ac.utn.appmovil.interfaces.IDBManager
 
+
 class ContactModel {
-    private var dbManager: IDBManager = DBManager
+    private var dbManager: IDBManager
     private lateinit var _context: Context
 
     constructor(context: Context){
         _context= context
+        dbManager = SQLiteManager(context)
     }
 
     fun addContact(contact: Contact){
@@ -25,7 +27,7 @@ class ContactModel {
     fun removeContact(id: String){
         var result = dbManager.getById(id)
         if (result == null)
-            throw Exception(Resources.getSystem().getString(R.string.msgNotFoundContact))
+            throw Exception(_context.getString(R.string.msgNotFoundContact))
 
         dbManager.remove(id)
     }

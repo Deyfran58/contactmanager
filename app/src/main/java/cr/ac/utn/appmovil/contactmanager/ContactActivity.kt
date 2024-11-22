@@ -16,11 +16,11 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
-import cr.ac.utn.appmovil.identities.Contact
-import cr.ac.utn.appmovil.model.ContactModel
 import cr.ac.utn.appmovil.util.EXTRA_MESSAGE_CONTACTID
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.FileProvider
+import cr.ac.utn.appmovil.identities.Contact
+import cr.ac.utn.appmovil.model.ContactModel
 import java.io.File
 import java.lang.Exception
 

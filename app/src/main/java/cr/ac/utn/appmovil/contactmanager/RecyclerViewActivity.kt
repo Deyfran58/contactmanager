@@ -5,10 +5,10 @@ import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cr.ac.utn.appmovil.identities.Contact
-import cr.ac.utn.appmovil.model.ContactModel
 import cr.ac.utn.appmovil.util.EXTRA_MESSAGE_CONTACTID
 import cr.ac.utn.appmovil.util.util
 import cr.ac.utn.appmovil.interfaces.OnItemClickListener
+import cr.ac.utn.appmovil.model.ContactModel
 
 class RecyclerViewActivity : AppCompatActivity(), OnItemClickListener {
     private lateinit var customAdapter: RecyclerCustomAdapter
