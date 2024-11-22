@@ -2,28 +2,30 @@ package cr.ac.utn.appmovil.model
 import android.content.Context
 import android.content.res.Resources
 import cr.ac.utn.appmovil.contactmanager.R
-import cr.ac.utn.appmovil.data.MemoryManager
+import cr.ac.utn.appmovil.data.DBContactManager
 import cr.ac.utn.appmovil.identities.Contact
-import cr.ac.utn.appmovil.interfaces.IDBManager
+import cr.ac.utn.appmovil.identities.ContactDBManager
 
-class ContactModel {
-    private var dbManager: IDBManager = MemoryManager
+class ContactModel(context: Context) {
+
     private lateinit var _context: Context
+    private var dbManager: ContactDBManager
 
-    constructor(context: Context){
-        _context= context
+    init {
+        _context = context  // Inicializar _context dentro del bloque init
+        dbManager = DBContactManager(_context)  // Inicializar dbManager después de que _context esté inicializado
     }
 
-    fun addContact(contact: Contact){
+    fun addContact(contact: Contact) {
         dbManager.add(contact)
     }
 
-    fun updateContact(contact: Contact){
+    fun updateContact(contact: Contact) {
         dbManager.update(contact)
     }
 
-    fun removeContact(id: String){
-        var result = dbManager.getById(id)
+    fun removeContact(id: String) {
+        val result = dbManager.getByid(id)
         if (result == null)
             throw Exception(Resources.getSystem().getString(R.string.msgNotFoundContact))
 
@@ -32,20 +34,19 @@ class ContactModel {
 
     fun getContacts() = dbManager.getAll()
 
-    fun getContact(id: String): Contact{
-        var result = dbManager.getById(id)
-        if (result == null){
+    fun getContact(id: String): Contact {
+        val result = dbManager.getByid(id)
+        if (result == null) {
             val message = _context.getString(R.string.msgNotFoundContact).toString()
             throw Exception(message)
         }
         return result
     }
 
-    fun getContactNames(): List<String>{
+    fun getContactNames(): List<String> {
         val names = mutableListOf<String>()
         val contacts = dbManager.getAll()
-        contacts.forEach { i-> names.add(i.FullName)  }
+        contacts.forEach { i -> names.add(i.FullName) }
         return names.toList()
     }
-
 }

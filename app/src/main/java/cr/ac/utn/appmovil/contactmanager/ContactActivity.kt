@@ -210,12 +210,16 @@ class ContactActivity : AppCompatActivity() {
         startActivityForResult(intent, selectImage)
     }
 
-    fun TakePhoto(){
-        val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        filePhoto = getPhotoFile(FILE_NAME)
-        val providerFile = FileProvider.getUriForFile(this,PROVIDER, filePhoto)
-        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, providerFile)
-        startActivityForResult(takePhotoIntent, takePicture)
+    fun TakePhoto() {
+        try {
+            val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            filePhoto = getPhotoFile(FILE_NAME)
+            val providerFile = FileProvider.getUriForFile(this, PROVIDER, filePhoto)
+            takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, providerFile)
+            startActivityForResult(takePhotoIntent, takePicture)
+        } catch (e: Exception) {
+            Toast.makeText(this, "Error al iniciar la cámara: ${e.message}", Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun getPhotoFile(fileName: String): File{
@@ -226,13 +230,16 @@ class ContactActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (resultCode == RESULT_OK && requestCode == selectImage){            
+        if (resultCode == RESULT_OK && requestCode == selectImage) {
             val imageUri = data?.data
             imgPhoto.setImageURI(imageUri)
-        }
-        else if (resultCode == RESULT_OK && requestCode == takePicture){
-            val takenPhoto = BitmapFactory.decodeFile(filePhoto.absolutePath)
-            imgPhoto.setImageBitmap(takenPhoto)
+        } else if (resultCode == RESULT_OK && requestCode == takePicture) {
+            if (::filePhoto.isInitialized) {
+                val takenPhoto = BitmapFactory.decodeFile(filePhoto.absolutePath)
+                imgPhoto.setImageBitmap(takenPhoto)
+            } else {
+                Toast.makeText(this, "Error: Archivo de foto no inicializado", Toast.LENGTH_LONG).show()
+            }
         }
     }
 
