@@ -1,18 +1,19 @@
 package cr.ac.utn.appmovil.model
+
 import android.content.Context
 import android.content.res.Resources
 import cr.ac.utn.appmovil.contactmanager.R
-import cr.ac.utn.appmovil.data.MemoryManager
 import cr.ac.utn.appmovil.identities.Contact
-import cr.ac.utn.appmovil.interfaces.IDBManager
+import Database.ContactDatabaseManager
 
-class ContactModel {
-    private var dbManager: IDBManager = MemoryManager
-    private lateinit var _context: Context
+class ContactModel(context: Context) {
+    //private var dbManager: IDBManager = MemoryManager
+    private val dbManager = ContactDatabaseManager(context)
+    private val _context: Context = context
 
-    constructor(context: Context){
-        _context= context
-    }
+    /*constructor(context: Context){
+        _context = context
+    }*/
 
     fun addContact(contact: Contact){
         dbManager.add(contact)
