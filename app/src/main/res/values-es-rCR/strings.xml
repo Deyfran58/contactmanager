@@ -45,4 +45,5 @@
     <string name="msgContactAlreadyExists">El contacto ya existe</string>
     <string name="msgErrorAddingContact">Error al agregar el contacto</string>
     <string name="msgErrorUpdatingContact">Error al actualizar el proyecto</string>
+    <string name="msgErrorDeletingContact">Error al eliminar el contacto</string>
 </resources>
