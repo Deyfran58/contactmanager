@@ -1,51 +1,57 @@
 package cr.ac.utn.appmovil.model
+
 import android.content.Context
-import android.content.res.Resources
 import cr.ac.utn.appmovil.contactmanager.R
-import cr.ac.utn.appmovil.data.MemoryManager
-import cr.ac.utn.appmovil.identities.Contact
 import cr.ac.utn.appmovil.interfaces.IDBManager
+import cr.ac.utn.appmovil.identities.Contact
+import database.ContactDBManager // Asegúrate de importar correctamente tu ContactDBManager
 
-class ContactModel {
-    private var dbManager: IDBManager = MemoryManager
-    private lateinit var _context: Context
+class ContactModel(private var dbManager: IDBManager, private var context: Context) {
 
-    constructor(context: Context){
-        _context= context
-    }
+    constructor(context: Context) : this(ContactDBManager(context), context)
 
-    fun addContact(contact: Contact){
+
+    fun addContact(contact: Contact) {
         dbManager.add(contact)
     }
 
-    fun updateContact(contact: Contact){
+    fun updateContact(contact: Contact) {
         dbManager.update(contact)
     }
 
-    fun removeContact(id: String){
-        var result = dbManager.getById(id)
-        if (result == null)
-            throw Exception(Resources.getSystem().getString(R.string.msgNotFoundContact))
 
+    fun removeContact(id: String) {
+        val result = dbManager.getById(id)
+        if (result == null) {
+            val message = context.getString(R.string.msgNotFoundContact)
+            throw Exception(message)
+        }
         dbManager.remove(id)
     }
 
-    fun getContacts() = dbManager.getAll()
 
-    fun getContact(id: String): Contact{
-        var result = dbManager.getById(id)
-        if (result == null){
-            val message = _context.getString(R.string.msgNotFoundContact).toString()
+    fun getAllContacts(): List<Contact> {
+        return dbManager.getAll()
+    }
+
+    fun getContacts() = getAllContacts()
+
+
+    fun getContact(id: String): Contact {
+        val result = dbManager.getById(id)
+        if (result == null) {
+            val message = context.getString(R.string.msgNotFoundContact)
             throw Exception(message)
         }
         return result
     }
 
-    fun getContactNames(): List<String>{
+    fun getContactNames(): List<String> {
         val names = mutableListOf<String>()
         val contacts = dbManager.getAll()
-        contacts.forEach { i-> names.add(i.FullName)  }
-        return names.toList()
+        contacts.forEach { contact ->
+            names.add("${contact.Name} ${contact.LastName}")
+        }
+        return names
     }
-
 }
