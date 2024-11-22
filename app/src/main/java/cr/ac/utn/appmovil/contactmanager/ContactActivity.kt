@@ -21,6 +21,7 @@ import cr.ac.utn.appmovil.model.ContactModel
 import cr.ac.utn.appmovil.util.EXTRA_MESSAGE_CONTACTID
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.FileProvider
+import cr.ac.utn.appmovil.data.DatabaseHelper
 import java.io.File
 import java.lang.Exception
 
@@ -116,21 +117,24 @@ class ContactActivity : AppCompatActivity() {
 
     fun saveContact(){
         try {
-            val contact = Contact()
-            contact.Id = txtId.text.toString()
-            contact.Name = txtName.text.toString()
-            contact.LastName = txtLastName.text.toString()
-            contact.Phone = txtPhone.text.toString()?.toInt()!!
-            contact.Email = txtEmail.text.toString()
-            contact.Address = txtAddress.text.toString()
-            contact.Photo = (imgPhoto?.drawable as BitmapDrawable).bitmap
-            contact.Country = spCountries.selectedItem.toString()
+            val contact = Contact(
+            _id = txtId.text.toString(),
+            _name = txtName.text.toString(),
+            _lastName = txtLastName.text.toString(),
+            _phone = txtPhone.text.toString()?.toInt()!!,
+            _email = txtEmail.text.toString(),
+            _address = txtAddress.text.toString(),
+            _photo = (imgPhoto?.drawable as BitmapDrawable).bitmap,
+            _country = spCountries.selectedItem.toString()
+            )
+
 
             if (dataValidation(contact)){
                 if (!isEditionMode)
                     contactMod.addContact(contact)
                 else
                     contactMod.updateContact(contact)
+
 
                 cleanScreen()
                 Toast.makeText(this, getString(R.string.msgSave).toString(),Toast.LENGTH_LONG).show()
@@ -143,10 +147,10 @@ class ContactActivity : AppCompatActivity() {
     }
 
     fun dataValidation(contact: Contact): Boolean{
-        return contact.Id.isNotEmpty() && contact.Name.isNotEmpty() &&
-                contact.LastName.isNotEmpty() && contact.Address.isNotEmpty() &&
-                contact.Email.isNotEmpty() &&
-                (contact.Phone != null && contact.Phone > 0)
+        return contact._id.isNotEmpty() && contact._name.isNotEmpty() &&
+                contact._lastName.isNotEmpty() && contact._address.isNotEmpty() &&
+                contact._email.isNotEmpty() &&
+                (contact._phone != null && contact._phone > 0)
     }
 
     fun cleanScreen(){
@@ -164,14 +168,14 @@ class ContactActivity : AppCompatActivity() {
     fun loadEditContact(id: String): Boolean{
         try{
             val contact = contactMod.getContact(id)
-            txtId.setText(contact.Id)
-            txtName.setText(contact.Name)
-            txtLastName.setText(contact.LastName)
-            txtPhone.setText(contact.Phone.toString())
-            txtEmail.setText(contact.Email)
-            txtAddress.setText(contact.Address)
-            spCountries.setSelection(countries.indexOf(contact.Country.trim()))
-            imgPhoto.setImageBitmap(contact.Photo)
+            txtId.setText(contact._id)
+            txtName.setText(contact._name)
+            txtLastName.setText(contact._lastName)
+            txtPhone.setText(contact._phone.toString())
+            txtEmail.setText(contact._email)
+            txtAddress.setText(contact._address)
+            spCountries.setSelection(countries.indexOf(contact._country.trim()))
+            imgPhoto.setImageBitmap(contact._photo)
             isEditionMode = true
             txtId.isEnabled = false
 

@@ -16,10 +16,10 @@ class CustomViewHolder (view: View): RecyclerView.ViewHolder(view){
     var imgPhoto: ImageView = view.findViewById(R.id.imgPhoto_ItemRecycler)
 
     fun bind (item: Contact, clickListener: OnItemClickListener){
-        txtFullName.text = item.FullName
-        txtAddress.text = item.Address
-        txtPhone.text = item.Phone.toString()
-        imgPhoto.setImageBitmap(item.Photo)
+        txtFullName.text = item._name
+        txtAddress.text = item._address
+        txtPhone.text = item._phone.toString()
+        imgPhoto.setImageBitmap(item._photo)
 
         itemView.setOnClickListener{
             clickListener.onItemClicked(item)

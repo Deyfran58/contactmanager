@@ -27,6 +27,6 @@ class RecyclerViewActivity : AppCompatActivity(), OnItemClickListener {
     }
 
     override fun onItemClicked  (contact: Contact) {
-        util.openActivity(this, ContactActivity::class.java, EXTRA_MESSAGE_CONTACTID, contact.Id)
+        util.openActivity(this, ContactActivity::class.java, EXTRA_MESSAGE_CONTACTID, contact._id)
     }
 }
