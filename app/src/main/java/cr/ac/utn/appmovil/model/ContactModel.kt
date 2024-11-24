@@ -1,66 +1,46 @@
 package cr.ac.utn.appmovil.model
 
 import android.content.Context
+import android.content.res.Resources
 import cr.ac.utn.appmovil.contactmanager.R
 import cr.ac.utn.appmovil.identities.Contact
-import data.ContactDbHelper
+import Database.ContactDbManager
 
-class ContactModel(private val context: Context) {
+class ContactModel(context: Context) {
+    private val dbManager = ContactDbManager(context)
+    private val _context: Context = context
 
-    private val dbHelper = ContactDbHelper(context)
-
-    fun addContact(contact: Contact) {
-        try {
-            dbHelper.add(contact)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            throw Exception(context.getString(R.string.msgErrorAddingContact))
-        }
+    fun addContact(contact: Contact){
+        dbManager.add(contact)
     }
 
-    fun updateContact(contact: Contact) {
-        try {
-            dbHelper.update(contact)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            throw Exception(context.getString(R.string.msgErrorUpdatingContact))
-        }
+    fun updateContact(contact: Contact){
+        dbManager.update(contact)
     }
 
-    fun removeContact(id: String) {
-        try {
-            dbHelper.remove(id)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            throw Exception(context.getString(R.string.msgErrorDeletingContact))
-        }
+    fun removeContact(id: String){
+        var result = dbManager.getById(id)
+        if (result == null)
+            throw Exception(Resources.getSystem().getString(R.string.msgNotFoundContact))
+
+        dbManager.remove(id)
     }
 
-    fun getContacts(): List<Contact> {
-        return try {
-            dbHelper.getAll()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            throw Exception(context.getString(R.string.msgErrorFetchingContacts))
+    fun getContacts() = dbManager.getAll()
+
+    fun getContact(id: String): Contact{
+        var result = dbManager.getById(id)
+        if (result == null){
+            val message = _context.getString(R.string.msgNotFoundContact).toString()
+            throw Exception(message)
         }
+        return result
     }
 
-    fun getContact(id: String): Contact {
-        return try {
-            dbHelper.getById(id)
-                ?: throw Exception(context.getString(R.string.msgNotFoundContact))
-        } catch (e: Exception) {
-            e.printStackTrace()
-            throw Exception(context.getString(R.string.msgErrorFetchingContact))
-        }
-    }
-
-    fun getContactNames(): List<String> {
-        return try {
-            dbHelper.getAll().map { "${it.Name} ${it.LastName}" }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            throw Exception(context.getString(R.string.msgErrorFetchingContactNames))
-        }
+    fun getContactNames(): List<String>{
+        val names = mutableListOf<String>()
+        val contacts = dbManager.getAll()
+        contacts.forEach { i-> names.add(i.FullName)  }
+        return names.toList()
     }
 }

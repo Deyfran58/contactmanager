@@ -1,4 +1,4 @@
-package data
+package cr.ac.utn.appmovil.data
 
 import android.content.ContentValues
 import android.content.Context
@@ -133,10 +133,17 @@ class ContactDbHelper(context: Context) :
         val email = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_EMAIL))
         val address = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ADDRESS))
         val country = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_COUNTRY))
+
         val photoBytes = cursor.getBlob(cursor.getColumnIndexOrThrow(COLUMN_PHOTO))
-        val photoBitmap = photoBytes?.let { byteArrayToBitmap(it) }
+        val photoBitmap: Bitmap = photoBytes?.let {
+            byteArrayToBitmap(it)
+        } ?: getDefaultBitmap()
 
         return Contact(id, name, lastName, phone, email, address, country, photoBitmap)
+    }
+
+    private fun getDefaultBitmap(): Bitmap {
+        return Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
     }
 
     private fun bitmapToByteArray(bitmap: Bitmap): ByteArray {

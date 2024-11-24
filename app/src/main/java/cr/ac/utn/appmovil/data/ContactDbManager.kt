@@ -1,11 +1,11 @@
-package database
+package Database
 
 import android.content.Context
+import cr.ac.utn.appmovil.data.ContactDbHelper
 import cr.ac.utn.appmovil.identities.Contact
 import cr.ac.utn.appmovil.interfaces.IDBManager
-import data.ContactDbHelper
 
-class ContactDbManager(context: Context) : IDBManager {
+class ContactDbManager(context: Context): IDBManager {
     private val dbHelper = ContactDbHelper(context)
 
     override fun add(contact: Contact) {
