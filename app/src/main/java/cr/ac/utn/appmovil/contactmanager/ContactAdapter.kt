@@ -1,66 +1,59 @@
 package cr.ac.utn.appmovil.contactmanager
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import cr.ac.utn.appmovil.identities.Contact
+import cr.ac.utn.appmovil.contactmanager.R
 
-class ContactAdapter(private val mCtx: Context, private val resource:Int, private val dataSource: List<Contact>): //BaseAdapter()
+class ContactAdapter(
+    private val context: Context,
+    private val dataSource: List<Contact>
+) : BaseAdapter() {
 
-    ArrayAdapter<Contact>(mCtx, resource, dataSource)
-{
-    private val inflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+    override fun getCount(): Int = dataSource.size
 
-    override fun getCount(): Int {
-        return dataSource.size
-    }
+    override fun getItem(position: Int): Any = dataSource[position]
+
+    override fun getItemId(position: Int): Long = position.toLong()
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        val rowView = convertView ?: LayoutInflater.from(parent.context)
+            .inflate(R.layout.list_item_contact, parent, false)
 
-        val rowView = inflater.inflate(R.layout.list_item_contact, parent, false)
-        val txtContactNameItem = rowView.findViewById(R.id.txtContactNameItem) as TextView
-        val txtAddressItem = rowView.findViewById(R.id.txtAddressItem) as TextView
-        val txtPhoneItem = rowView.findViewById(R.id.txtPhoneItem) as TextView
-        val imgPhotoItem = rowView.findViewById(R.id.imgPhotoItem) as ImageView
+        val txtContactNameItem = rowView.findViewById<TextView>(R.id.txtContactNameItem)
+        val txtAddressItem = rowView.findViewById<TextView>(R.id.txtAddressItem)
+        val txtPhoneItem = rowView.findViewById<TextView>(R.id.txtPhoneItem)
+        val imgPhotoItem = rowView.findViewById<ImageView>(R.id.imgPhotoItem)
 
-        val contact = dataSource[position] as Contact
+        // Obtener el objeto Contact actual
+        val contact = dataSource[position]
 
+        // Asignar datos a las vistas
         txtContactNameItem.text = contact.FullName
         txtAddressItem.text = contact.Address
-        txtPhoneItem.text = contact.Phone.toString()
-        imgPhotoItem.setImageBitmap(contact.Photo)
+        txtPhoneItem.text = contact.Phone
+
+        // Manejar si no hay una foto asignada
+        if (!contact.Photo.isNullOrEmpty()) {
+            imgPhotoItem.setImageBitmap(decodeBase64ToBitmap(contact.Photo))
+        } else {
+            imgPhotoItem.setImageResource(R.drawable.ic_launcher_foreground) // Imagen predeterminada
+        }
 
         return rowView
-
-        //return super.getView(position, convertView, parent)
     }
 
-    /*override fun getItem(position: Int): Any {
-        return dataSource[position]
-    }*/
-
-    override fun getItemId(position: Int): Long {
-        return position.toLong()
+    // Método para decodificar una cadena Base64 en un Bitmap
+    private fun decodeBase64ToBitmap(base64Str: String): Bitmap {
+        val decodedBytes = Base64.decode(base64Str, Base64.DEFAULT)
+        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
     }
-
-    /*override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val rowView = inflater.inflate(R.layout.list_item_contact, parent, false)
-        val txtContactNameItem = rowView.findViewById(R.id.txtContactNameItem) as TextView
-        val txtAddressItem = rowView.findViewById(R.id.txtAddressItem) as TextView
-        val txtPhoneItem = rowView.findViewById(R.id.txtPhoneItem) as TextView
-        val imgPhotoItem = rowView.findViewById(R.id.imgPhotoItem) as ImageView
-
-        val contact = dataSource[position] as Contact
-
-        txtContactNameItem.text = contact.FullName
-        txtAddressItem.text = contact.Address
-        txtPhoneItem.text = contact.Phone.toString()
-
-        return rowView
-    }*/
 }

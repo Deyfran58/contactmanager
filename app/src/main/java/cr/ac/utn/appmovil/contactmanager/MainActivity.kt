@@ -1,129 +1,108 @@
 package cr.ac.utn.appmovil.contactmanager
 
+import Database.ContactDatabaseManager
+import org.json.JSONObject
+import java.net.HttpURLConnection
+import java.net.URL
+import java.io.OutputStream
+import android.util.Log
 import android.app.AlertDialog
-import android.content.Context
-import android.content.DialogInterface
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.*
+import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
-import androidx.databinding.DataBindingUtil
-import cr.ac.utn.appmovil.util.*
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var dbManager: ContactDatabaseManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val btnContactList: Button = findViewById<Button>(R.id.main_btnContactList)
-        btnContactList.setOnClickListener(View.OnClickListener { view ->
-            openActivity(ContactListActivity::class.java)
-        })
+        dbManager = ContactDatabaseManager(this)
 
-        val btnContactListCustom: Button = findViewById<Button>(R.id.main_btnContactListCustom)
-        btnContactListCustom.setOnClickListener(View.OnClickListener { view ->
-            openActivity(ContactListCustomActivity::class.java)
-        })
+        // Botón: Mostrar logs de autenticación
+        val btnAuthLogs: Button = findViewById(R.id.main_btnAuthLogs)
+        btnAuthLogs.setOnClickListener {
+            showAuthLogs()
+        }
 
-        val btnRecyclerView: Button = findViewById<Button>(R.id.btnRecycleView)
-        btnRecyclerView.setOnClickListener(View.OnClickListener { view ->
-            openActivity(RecyclerViewActivity::class.java)
-        })
+        // Botón: Manejar autenticación
+        val btnAuthenticate: Button = findViewById(R.id.main_btnAuthenticate)
+        btnAuthenticate.setOnClickListener {
+            handleAuthentication()
+        }
 
-        val btnDisplayDialog: Button = findViewById<Button>(R.id.btngetDialog)
-        btnDisplayDialog.setOnClickListener(View.OnClickListener { view ->
-            DisplayDialog()
-        })
+        // Botón: Redirigir a la lista de contactos
+        val btnContactList: Button = findViewById(R.id.main_btnContactList)
+        btnContactList.setOnClickListener {
+            startActivity(Intent(this, ContactListActivity::class.java))
+        }
 
-        val btnCustomDisplayDialog: Button = findViewById<Button>(R.id.btnDisplayCustomDialog)
-        btnCustomDisplayDialog.setOnClickListener(View.OnClickListener { view ->
-            DisplayCustomeDialog()
-        })
+        // Botón: Redirigir a la lista personalizada de contactos
+        val btnContactListCustom: Button = findViewById(R.id.main_btnContactListCustom)
+        btnContactListCustom.setOnClickListener {
+            startActivity(Intent(this, ContactListCustomActivity::class.java))
+        }
 
-        val btnViewMap: Button = findViewById<Button>(R.id.btnViewMap)
-        btnViewMap.setOnClickListener(View.OnClickListener { view ->
-            openActivity(MapsActivity::class.java)
-        })
-
-        val btnCurrentLocation: Button = findViewById<Button>(R.id.btnCurrentLocationMap)
-        btnCurrentLocation.setOnClickListener(View.OnClickListener { view ->
-            openActivity(CurrentLocationMapsActivity::class.java)
-        })
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.main_menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.mnuAddContact -> {
-                openActivity(ContactActivity::class.java)
-                true
-            }
-            R.id.mnuViewContacts ->{
-                openActivity(ContactListActivity::class.java)
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
+        // Botón: Redirigir a la actividad de agregar contacto
+        val btnAddContact: Button = findViewById(R.id.main_btnAddContact)
+        btnAddContact.setOnClickListener {
+            startActivity(Intent(this, ContactActivity::class.java))
         }
     }
 
-    fun addContactButon(view: View) {
-        openActivity(ContactActivity::class.java)
-    }
+    // Función para manejar la autenticación
+    private fun authenticate(username: String, password: String): String {
+        val url = URL("https://apicontainers.azurewebsites.net/technicians/validateAuth")
+        val payload = JSONObject()
+        payload.put("username", username)
+        payload.put("password", password)
 
-    fun openActivity(objclass: Class<*>){
-        util.openActivity(this,objclass, "", "")
-    }
+        val connection = url.openConnection() as HttpURLConnection
+        connection.requestMethod = "POST"
+        connection.setRequestProperty("Content-Type", "application/json; utf-8")
+        connection.doOutput = true
 
-    fun DisplayDialog(){
-        val dialogBuilder = AlertDialog.Builder(this)
+        return try {
+            val outputStream: OutputStream = connection.outputStream
+            outputStream.write(payload.toString().toByteArray(Charsets.UTF_8))
+            outputStream.close()
 
-        //dialogBuilder.apply { setTitle("Hello") }.create().show()
-
-        dialogBuilder.setMessage(getString(R.string.QuestionCloseApp).toString())
-            .setCancelable(false)
-            .setPositiveButton(getString(R.string.Ok).toString(), DialogInterface.OnClickListener {
-                    dialog, id -> finish()
-            })
-            .setNegativeButton(getString(R.string.Cancel).toString(), DialogInterface.OnClickListener {
-                    dialog, id -> dialog.cancel()
-            })
-            .setNeutralButton("Neutral"){ _, _ ->
-                Toast.makeText(this, "Clicking neutral button", Toast.LENGTH_LONG).show()
+            val responseCode = connection.responseCode
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                "Success"
+            } else {
+                "Failed"
             }
-
-        // create dialog box
-        val alert = dialogBuilder.create()
-        // set title for alert dialog box
-        alert.setTitle(getString(R.string.TitleDialogQuestion).toString())
-        // show alert dialog
-        alert.show()
+        } catch (e: Exception) {
+            Log.e("AuthAPI", e.message.toString())
+            "Error"
+        } finally {
+            connection.disconnect()
+        }
     }
 
-    fun DisplayCustomeDialog() {
-        val inflater: LayoutInflater =
-            this.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val dialogBinding = inflater.inflate(R.layout.custom_dialog, null, false)
+    // Función para manejar el proceso de autenticación
+    private fun handleAuthentication() {
+        val username = "user_input" // Reemplazar con la entrada real del usuario
+        val password = "password_input" // Reemplazar con la entrada real del usuario
 
-        val dialogBuilder = AlertDialog.Builder(this, 0).create()
+        val result = authenticate(username, password)
+        dbManager.addAuthLog(result)
+        Toast.makeText(this, "Authentication: $result", Toast.LENGTH_LONG).show()
+    }
 
-        dialogBuilder.apply {
-            setView(dialogBinding)
-            setCancelable(false)
-        }.show()
-
-        var btnOk: Button = dialogBinding.findViewById(R.id.btnOk_CustomDialog)
-
-        btnOk.setOnClickListener(View.OnClickListener { view ->
-            dialogBuilder.dismiss()
-        })
+    // Función para mostrar los logs de autenticación
+    private fun showAuthLogs() {
+        val logs = dbManager.getAuthLogs()
+        val logString = logs.joinToString("\n")
+        AlertDialog.Builder(this)
+            .setTitle("Authentication Logs")
+            .setMessage(logString)
+            .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+            .show()
     }
 }

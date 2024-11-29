@@ -1,35 +1,54 @@
 package cr.ac.utn.appmovil.contactmanager
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import cr.ac.utn.appmovil.api.ContactAPI
 import cr.ac.utn.appmovil.identities.Contact
-import cr.ac.utn.appmovil.model.ContactModel
-import cr.ac.utn.appmovil.util.EXTRA_MESSAGE_CONTACTID
-import cr.ac.utn.appmovil.util.util
+import org.json.JSONArray
 
 class ContactListCustomActivity : AppCompatActivity() {
-    lateinit var lstContactList : ListView
+
+    private val contactAPI = ContactAPI()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_contact_list_custom)
+        loadContacts()
+    }
 
-        lstContactList = findViewById<ListView>(R.id.lstContactListCustom)
-        val contactArray = ArrayList<Contact>(ContactModel.getContacts())
-        val adapter = ContactAdapter(this, R.layout.list_item_contact, ContactModel.getContacts()) // ContactAdapter(this, ArrayList<Contact>(ContactModel.getContacts()))
-        lstContactList.adapter = adapter
+    private fun loadContacts() {
+        try {
+            val response = contactAPI.getAllContacts()
+            val contacts = JSONArray(response)
 
-        lstContactList.onItemClickListener = object : AdapterView.OnItemClickListener{
-            override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val contacts = ContactModel.getContacts()
-                val name = contacts[position].FullName
-                //Toast.makeText(applicationContext, itemValue, Toast.LENGTH_LONG).show()
-                util.openActivity(applicationContext, ContactActivity::class.java, EXTRA_MESSAGE_CONTACTID, name)
+            val contactNames = mutableListOf<String>()
+            val contactArray = ArrayList<Contact>()
+
+            for (i in 0 until contacts.length()) {
+                val contact = contacts.getJSONObject(i)
+                val contactObject = Contact(
+                    Id = contact.getInt("personId").toString(),
+                    Name = contact.getString("name"),
+                    LastName = contact.getString("lastName"),
+                    Country = contact.getInt("provinceCode").toString()
+                )
+                contactArray.add(contactObject)
+                contactNames.add("${contactObject.Name} ${contactObject.LastName}")
             }
+
+            val lstContactListCustom: ListView = findViewById(R.id.lstContactListCustom)
+            val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, contactNames)
+            lstContactListCustom.adapter = adapter
+
+            lstContactListCustom.setOnItemClickListener { _, _, position, _ ->
+                val contact = contactArray[position]
+                Toast.makeText(this, "Selected: ${contact.FullName}", Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: Exception) {
+            Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_LONG).show()
         }
     }
 }
