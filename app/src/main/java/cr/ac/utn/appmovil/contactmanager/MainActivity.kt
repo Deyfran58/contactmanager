@@ -3,14 +3,11 @@ package cr.ac.utn.appmovil.contactmanager
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
-import androidx.databinding.DataBindingUtil
 import cr.ac.utn.appmovil.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -34,6 +31,16 @@ class MainActivity : AppCompatActivity() {
             openActivity(RecyclerViewActivity::class.java)
         })
 
+        val btnAPiAddContact: Button = findViewById<Button>(R.id.btnApiAddContact)
+        btnAPiAddContact.setOnClickListener(View.OnClickListener { view ->
+            openActivity(APIAddContact::class.java)
+        })
+
+        val btnAPiContactList: Button = findViewById<Button>(R.id.btnMainApiContactList)
+        btnAPiContactList.setOnClickListener(View.OnClickListener { view ->
+            openActivity(APIContactList::class.java)
+        })
+
         val btnDisplayDialog: Button = findViewById<Button>(R.id.btngetDialog)
         btnDisplayDialog.setOnClickListener(View.OnClickListener { view ->
             DisplayDialog()
@@ -44,15 +51,6 @@ class MainActivity : AppCompatActivity() {
             DisplayCustomeDialog()
         })
 
-        val btnViewMap: Button = findViewById<Button>(R.id.btnViewMap)
-        btnViewMap.setOnClickListener(View.OnClickListener { view ->
-            openActivity(MapsActivity::class.java)
-        })
-
-        val btnCurrentLocation: Button = findViewById<Button>(R.id.btnCurrentLocationMap)
-        btnCurrentLocation.setOnClickListener(View.OnClickListener { view ->
-            openActivity(CurrentLocationMapsActivity::class.java)
-        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

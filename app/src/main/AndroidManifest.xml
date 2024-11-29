@@ -2,14 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cr.ac.utn.appmovil.contactmanager">
 
-    <!--
-         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
-         Google Maps Android API v2, but you must specify either coarse or fine
-         location permissions for the "MyLocation" functionality.
-    -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -18,18 +12,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Contactmanager">
-
-        <!--
-             The API key for Google Maps-based APIs is defined as a string resource.
-             (See the file "res/values/google_maps_api.xml").
-             Note that the API key is linked to the encryption key used to sign the APK.
-             You need a different API key for each encryption key, including the release key that is used to
-             sign the APK for publishing.
-             You can define the keys for the debug and release targets in src/debug/ and src/release/.
-        -->
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+        <activity
+            android:name=".APIContactList"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".APIAddContact"
+            android:exported="false" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -40,24 +31,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_file" />
         </provider>
-
-        <activity
-            android:name=".CurrentLocationMapsActivity"
-            android:exported="true"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity>
-
-        <activity
-            android:name=".MapsActivity"
-            android:exported="true"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity>
 
         <activity
             android:name=".RecyclerViewActivity"
@@ -84,14 +57,6 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name=".ContactListActivity"
-            android:exported="true"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity>
-        <activity
             android:name=".ContactActivity"
             android:exported="true"
             android:parentActivityName=".MainActivity">
@@ -100,7 +65,7 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
