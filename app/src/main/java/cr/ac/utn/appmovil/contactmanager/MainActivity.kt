@@ -46,6 +46,16 @@ class MainActivity : AppCompatActivity() {
         btnGoViewAuth.setOnClickListener(View.OnClickListener { view ->
             openActivity(listaAuthenticate::class.java)
         })
+
+        val btnViewContacts: Button = findViewById(R.id.APIViewCont)
+        btnViewContacts.setOnClickListener(View.OnClickListener { view ->
+            openActivity(listContactAPI::class.java)
+        })
+
+        val btnAddContact: Button = findViewById(R.id.btnAPIAddContact)
+        btnAddContact.setOnClickListener(View.OnClickListener { view ->
+            openActivity(addContactAPI::class.java)
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

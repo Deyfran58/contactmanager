@@ -61,8 +61,8 @@ class CurrentLocationMapsActivity : AppCompatActivity(), OnMyLocationButtonClick
             val carrizal = LatLng(9.979394, -84.727565)
             val newyork = LatLng(40.762718, -73.980307)
             val radius: Double = 5000f.toDouble()
-            mMap.addMarker(MarkerOptions().position(carrizal).title("Marker in Barranca")).tag=0
-            mMap.addMarker(MarkerOptions().position(newyork).title("Marker in New York")).tag=1
+            mMap.addMarker(MarkerOptions().position(carrizal).title("Marker in Barranca"))?.tag =0
+            mMap.addMarker(MarkerOptions().position(newyork).title("Marker in New York"))?.tag =1
             val circle = CircleOptions()
             circle.center(newyork)
             circle.radius(radius)

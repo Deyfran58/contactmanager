@@ -13,6 +13,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Contactmanager">
         <activity
+            android:name=".addContactAPI"
+            android:exported="false" />
+        <activity
+            android:name=".listContactAPI"
+            android:exported="false" />
+        <activity
             android:name=".listaAuthenticate"
             android:exported="false" />
 

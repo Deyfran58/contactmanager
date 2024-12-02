@@ -1,9 +1,11 @@
 package cr.ac.utn.appmovil.network
 
+import cr.ac.utn.appmovil.identities.ContactAPI
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import org.json.JSONObject
 import java.io.IOException
+
 
 class ApiService {
 
@@ -47,9 +49,17 @@ class ApiService {
         })
     }
 
-    fun addContact(contact: JSONObject, callback: (Boolean) -> Unit) {
+    fun addContact(contact: ContactAPI, callback: (Boolean) -> Unit) {
         val url = "https://movil-vaccine-api.azurewebsites.net/people/"
-        val body = RequestBody.create("application/json; charset=utf-8".toMediaType(), contact.toString())
+        val json = JSONObject().apply {
+            put("personId", contact.personId)
+            put("name", contact.name)
+            put("lastName", contact.lastName)
+            put("provinceCode", contact.provinceCode)
+            put("birthdate", contact.birthdate)
+            put("gender", contact.gender)
+        }
+        val body = RequestBody.create("application/json; charset=utf-8".toMediaType(), json.toString())
         val request = Request.Builder().url(url).post(body).build()
 
         client.newCall(request).enqueue(object : Callback {
@@ -95,3 +105,4 @@ class ApiService {
         })
     }
 }
+

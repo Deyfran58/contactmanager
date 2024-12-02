@@ -43,4 +43,6 @@
     <string name="promptSelectCountry">Select a Country</string>
     <string name="contactId">Id</string>
     <string name="btnViewAllAth">View Authentications</string>
+    <string name="addContactAPI">Add contact</string>
+    <string name="ViewContactAPI">VIew contacts</string>
 </resources>
