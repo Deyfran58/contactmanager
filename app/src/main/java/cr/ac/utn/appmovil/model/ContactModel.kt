@@ -1,50 +1,38 @@
 package cr.ac.utn.appmovil.model
-import android.content.res.Resources
+
+import android.content.Context
+import androidx.core.content.ContextCompat.getString
 import cr.ac.utn.appmovil.contactmanager.R
+import cr.ac.utn.appmovil.data.SQLiteDBManager
 import cr.ac.utn.appmovil.identities.Contact
 
-class ContactModel {
-    companion object  {
-        private var contactList = mutableListOf<Contact>()
+class ContactModel(context: Context) {
+    private var dbManager = SQLiteDBManager(context)
 
-        fun addContact(contact: Contact){
-            contactList.add(contact)
-        }
+    fun addContact(contact: Contact) {
+        dbManager.add(contact)
+    }
 
-        fun updateContact(olId:String, contact: Contact){
-            val delContact = getContact(olId)
-            contactList.remove(delContact)
-            contactList.add(contact)
-        }
+    fun updateContact(contact: Contact) {
+        dbManager.update(contact)
+    }
 
-        fun deleteContact(id: String){
-            try {
-                val delContact = getContact(id)
-                contactList.remove(delContact)
-            }catch (e: Exception){
-                throw e
-            }
-        }
+    fun removeContact(id: String) {
+        val result = dbManager.getById(id)
+        dbManager.remove(id)
+    }
 
-        fun getContacts()= contactList.toList()
+    fun getContacts() = dbManager.getAll()
 
-        fun getContact(id: String): Contact{
-            try {
-                var result = contactList.filter { (it.FullName).equals(id) }
-                if (!result.any()){
-                    val system  = Resources.getSystem()
-                    throw Exception(system.getString(R.string.msgContactNoFound).toString())
-                }
-                return result[0]
-            }catch (e: Exception){
-                throw e
-            }
-        }
+    fun getContact(id: String): Contact? {
+        val result = dbManager.getById(id)
+        return result
+    }
 
-        fun getContactNames(): List<String> {
-            val names = mutableListOf<String>()
-            contactList.forEach{i-> names.add(i.FullName)}
-            return names.toList()
-        }
+    fun getContactNames(): List<String> {
+        val names = mutableListOf<String>()
+        val contacts = dbManager.getAll()
+        contacts.forEach { i -> names.add(i.FullName) }
+        return names.toList()
     }
 }

@@ -8,9 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
-import androidx.databinding.DataBindingUtil
 import cr.ac.utn.appmovil.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -44,14 +42,9 @@ class MainActivity : AppCompatActivity() {
             DisplayCustomeDialog()
         })
 
-        val btnViewMap: Button = findViewById<Button>(R.id.btnViewMap)
-        btnViewMap.setOnClickListener(View.OnClickListener { view ->
-            openActivity(MapsActivity::class.java)
-        })
-
-        val btnCurrentLocation: Button = findViewById<Button>(R.id.btnCurrentLocationMap)
-        btnCurrentLocation.setOnClickListener(View.OnClickListener { view ->
-            openActivity(CurrentLocationMapsActivity::class.java)
+        val btnGoViewAuth: Button = findViewById<Button>(R.id.btnViewAuth)
+        btnGoViewAuth.setOnClickListener(View.OnClickListener { view ->
+            openActivity(listaAuthenticate::class.java)
         })
     }
 
@@ -126,4 +119,6 @@ class MainActivity : AppCompatActivity() {
             dialogBuilder.dismiss()
         })
     }
+
+
 }

@@ -7,17 +7,6 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/main_btnContactListCustom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="104dp"
-        android:text="@string/mnu_contact_list_custom"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_btnContactList" />
-
-    <Button
         android:id="@+id/main_btnAddContact"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -39,45 +28,13 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/main_btnAddContact"
-        app:layout_constraintVertical_bias="0.034" />
-
-    <Button
-        android:id="@+id/btnDisplayCustomDialog"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/CustomDialog"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btngetDialog" />
-
-    <Button
-        android:id="@+id/btnRecycleView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="@string/mnuRecycleView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_btnContactListCustom" />
-
-    <Button
-        android:id="@+id/btngetDialog"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:text="@string/DisplayDialog"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnRecycleView" />
+        app:layout_constraintVertical_bias="0.057" />
 
     <Button
         android:id="@+id/main_btnContactListCustom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="28dp"
         android:text="@string/mnu_contact_list_custom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
@@ -85,24 +42,44 @@
         app:layout_constraintTop_toBottomOf="@+id/main_btnContactList" />
 
     <Button
-        android:id="@+id/btnViewMap"
+        android:id="@+id/btngetDialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="@string/GoogleMap"
+        android:layout_marginTop="44dp"
+        android:text="@string/DisplayDialog"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnDisplayCustomDialog" />
+        app:layout_constraintTop_toBottomOf="@+id/btnRecycleView" />
 
     <Button
-        android:id="@+id/btnCurrentLocationMap"
+        android:id="@+id/btnRecycleView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="@string/CurrentLocationMap"
+        android:layout_marginTop="28dp"
+        android:text="@string/mnuRecycleView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnViewMap" />
+        app:layout_constraintTop_toBottomOf="@+id/main_btnContactListCustom" />
+
+    <Button
+        android:id="@+id/btnDisplayCustomDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/CustomDialog"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btngetDialog" />
+
+    <Button
+        android:id="@+id/btnViewAuth"
+        android:layout_width="290dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="@string/btnViewAllAth"
+        app:layout_constraintTop_toBottomOf="@+id/btnDisplayCustomDialog"
+        tools:layout_editor_absoluteX="60dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
