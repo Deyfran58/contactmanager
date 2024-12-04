@@ -28,4 +28,11 @@
     <string name="SelectPhoto">Seleccionar foto</string>
     <string name="CurrentLocationMap">Ubicación actual</string>
     <string name="GoogleMap">Google Map</string>
+    <string name="contactId">id</string>
+    <string name="password">Contraseña</string>
+    <string name="btn_login">Iniciar</string>
+    <string name="missingSpace">Faltan campos</string>
+    <string name="Welc">Binvenido:</string>
+    <string name="Badreq">Request fallido</string>
+    <string name="btnLogin">Iniciar sesion</string>
 </resources>

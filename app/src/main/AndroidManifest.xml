@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cr.ac.utn.appmovil.contactmanager">
-
+    package="cr.ac.utn.appmovil.contactmanager" >
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -17,8 +16,23 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Contactmanager">
-
+        android:theme="@style/Theme.Contactmanager" >
+        <activity
+            android:name=".Register_person"
+            android:exported="false"
+            android:theme="@style/Theme.Contactmanager" />
+        <activity
+            android:name=".item_login"
+            android:exported="false"
+            android:theme="@style/Theme.Contactmanager" />
+        <activity
+            android:name=".Login_register_time"
+            android:exported="false"
+            android:theme="@style/Theme.Contactmanager" />
+        <activity
+            android:name=".Login"
+            android:exported="false"
+            android:theme="@style/Theme.Contactmanager" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -35,7 +49,7 @@
             android:name="androidx.core.content.FileProvider"
             android:authorities="cr.ac.utn.appmovil.contactmanager.fileprovider"
             android:exported="false"
-            android:grantUriPermissions="true">
+            android:grantUriPermissions="true" >
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_file" />
@@ -44,25 +58,23 @@
         <activity
             android:name=".CurrentLocationMapsActivity"
             android:exported="true"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-
         <activity
             android:name=".MapsActivity"
             android:exported="true"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-
         <activity
             android:name=".RecyclerViewActivity"
             android:exported="true"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
@@ -70,23 +82,16 @@
         <activity
             android:name=".ContactListCustomActivity"
             android:exported="true"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
+                android:exported="true"
                 android:value=".MainActivity" />
         </activity>
         <activity
             android:name=".ContactListActivity"
             android:exported="true"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity>
-        <activity
-            android:name=".ContactListActivity"
-            android:exported="true"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
@@ -94,14 +99,14 @@
         <activity
             android:name=".ContactActivity"
             android:exported="true"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
