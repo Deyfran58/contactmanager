@@ -17,7 +17,7 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tableLayout"
-        app:layout_constraintVertical_bias="0.267"
+        app:layout_constraintVertical_bias="0.171"
         tools:ignore="SpeakableTextPresentCheck" />
 
     <TableLayout
@@ -174,35 +174,37 @@
             <Spinner
                 android:id="@+id/spCountries_contact"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
                 android:gravity="center"
                 android:prompt="@string/promptSelectCountry" />
 
         </TableRow>
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <Button
-                android:id="@+id/btnTakePicture"
-                android:layout_width="101dp"
-                android:layout_height="wrap_content"
-                android:text="@string/TakePicture" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <Button
-                android:id="@+id/btnSelectPhoto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/SelectPhoto" />
-        </TableRow>
-
     </TableLayout>
+
+    <Button
+        android:id="@+id/btnSelectPhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:backgroundTint="@android:color/holo_blue_light"
+        android:text="@string/SelectPhoto"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.117"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgPhoto_Contact" />
+
+    <Button
+        android:id="@+id/btnTakePicture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:backgroundTint="@android:color/holo_blue_light"
+        android:text="@string/TakePicture"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.834"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgPhoto_Contact" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
