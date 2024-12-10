@@ -3,11 +3,12 @@ package cr.ac.utn.appmovil.contactmanager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import cr.ac.utn.appmovil.identities.Contact
-import cr.ac.utn.appmovil.interfaces.OnItemClickListener
+import cr.ac.utn.appmovil.interfaces.*
 
 class CustomViewHolder (view: View): RecyclerView.ViewHolder(view){
     var txtFullName: TextView = view.findViewById(R.id.txtContactNameItem_recycler)
@@ -28,6 +29,8 @@ class CustomViewHolder (view: View): RecyclerView.ViewHolder(view){
 }
 
 class RecyclerCustomAdapter(private var itemList: List<Contact>, val itemClickListener: OnItemClickListener): RecyclerView.Adapter<CustomViewHolder>() {
+
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.recycler_item_contact, parent, false)
